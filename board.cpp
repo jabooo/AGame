@@ -1,12 +1,13 @@
 #include "board.h"
 #include "blip.h"
 #include <iostream>
+#include "location.h"
 using namespace std;
 
 // class constructor
 Board::Board(int w, int h)
 {
-    //allocate space for the grid
+    // allocates space for the grid
     {
         Blip** col;
         col = new Blip* [h];
@@ -18,9 +19,25 @@ Board::Board(int w, int h)
         width = w;
         height = h;
      }
+     // initializes the board
+     initBoard();
 }
 
-//  return the width of the board
+// initializes the board
+int Board::initBoard()
+{
+    //nulls all cells in the board
+    for (int y = 0; y<height; y++)
+    {
+        for (int x = 0; x<width; x++)
+        {
+            this->grid [x] [y] = NULL;
+        }
+    }
+}
+        
+        
+// return the width of the board
 int Board::getWidth()
 {
     return width;
@@ -75,27 +92,27 @@ int Board::create_blip(int id,int xpos, int ypos)
     }
     else
     {
-        return 3;
+        return 102;
     }
 }
 
 // check if there's a blip at some location with given id
-int Board::checkIfBlipId(int id, int xpos, int ypos)
+int Board::checkLocId(int xpos, int ypos)
 {
     if(isAllowed(xpos, ypos)==1)
     {
-            if (grid [xpos] [ypos]->id == id)
+            if (grid [xpos] [ypos] == NULL)
             {
-                return 1;
+                return 0;
             }
             else
             {
-                return 0;
-            }        
+                return grid [xpos] [ypos] -> id;
+            }
     }
     else
     {
-        return 3;
+        return 102;
     }
 }
 
@@ -110,7 +127,7 @@ int Board::move_by_id(Blip* someBlip, int newX, int newY)
 	return 1;
     }
     else
-    return 0;
+    return 102;
 }
 
 // Move a Blip by its coordinates
@@ -171,39 +188,162 @@ int Board::dir_move_by_loc(int curX, int curY, int dir)
         newY=curY+1;
         newX=curX-1;
     }
-    if (isAllowed(newX, newY)==1)
+    if (isAllowed(newX, newY)== 1 && isAllowed(curX, curY) == 1 && grid [curX] [curY] != NULL)
     {
 	Blip* workingBlip = grid [curX] [curY];
 	grid [curX] [curY] = NULL;
     grid [newX] [newY] = workingBlip; 
 	workingBlip->move(newX, newY); 
-    return 1; 
+    return 1;
+    }
+    else 
+    {
+    return 102;
     }
 }
 
-// print the grid
+// print the grid in a binary fashon
 int Board::dev_print_bin()
 {
     using namespace std;
     cout << endl << endl << endl;
-      for (int i=0; i<this->getHeight() ; i++)
+    cout << getHeight() << endl;
+    cout << getWidth () << endl;
+    cout << grid [0] [0]-> id << endl;
+    
+      for (int j=this->getHeight()-1; j>=0 ; j--)
       {
-          for (int j=0; i<this->getWidth() ; i++)
+          //cout << j << endl;
+          for (int i=0; i<this->getWidth() ; i++)
           {
-              if (grid [j] [i]->id == 1)
-              {
-                   cout << "|";
-              }
-              else
+              //cout << i << endl;
+              
+              if (grid [i] [j] == NULL)
               {
                    cout << "_";
               }
-              if (j==(width-1))
+              
+              else
+              {
+                   cout << "x";
+              }
+              if (i==(getWidth()-1))
               {
                    cout << endl;
               }
+              
+              
           }    
       }
+      
+}
+
+// print the ids of each space in the grid
+int Board::dev_print_id()
+{
+    using namespace std;
+
+      for (int j=this->getHeight()-1; j>=0 ; j--)
+      {
+          //cout << j << endl;
+          for (int i=0; i<this->getWidth() ; i++)
+          {
+              //cout << i << endl;
+              
+              if (grid [i] [j] == NULL)
+              {
+                   cout << "x";
+              }
+              
+              else
+              {
+                   cout << grid [i] [j]-> id;
+              }
+              if (i==(getWidth()-1))
+              {
+                   cout << endl;
+              }
+              
+              
+          }    
+      }
+      
+}
+
+// Prints the board much like an ordinary gameboard, with columns labeled by letters and rows denoted by numbers
+int Board :: draw_game_board()
+{
+    char abc [27] = {' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+    {
+    using namespace std;
+    cout << endl << endl << endl;
+    //cout << getHeight() << endl;
+    //cout << getWidth () << endl;
+    //cout << grid [0] [0]-> id << endl;
+    
+    for (int j=this->getHeight(); j>=0 ; j--)
+    {
+       //cout << j << endl;
+       for (int i=0; i<=this->getWidth() ; i++)
+       {
+           //cout << i << endl;
+           if (j == 0)
+           {
+                cout << abc[i] << " ";
+           }
+           else if (i == 0 && j<10)
+           {
+                cout << j << " ";
+           }
+           
+           else if (i == 0 && j>=10)
+           {
+                cout << j;
+           }
+           
+           
+           else if (grid [i-1] [j-1] == NULL)
+           {
+                cout << "_ ";
+           }
+           
+           else
+           {
+                cout << grid [i-1] [j-1]->tag << " ";
+           }
+           if (i==(getWidth()))
+           {
+                cout << endl << endl;
+           }
+              
+              
+       }    
+    }
+      
+}
+}
+
+// checks how far the closest blip in a given direction is
+int Board::checkClosestDir(Blip* source, int dir)
+{
+    int curX = source->getX();
+    int curY = source->getY();
+    int dist = 0;
+    bool found = false;
+    while (found == false)
+    {
+        if (inBound(curX, curY) == 0)
+        {
+           found = true;
+        }
+        else if (grid[curX][curY] != NULL)
+        {
+            found = true;
+        }
+        dist++;        
+    
+    }
+    return dist;
 }
 
 

@@ -8,8 +8,14 @@ using namespace std;
 An attempt at classification of generic int responses
 0: Failure
 1: Success
-2: Referenced object does not exist
-3: Location out of bounds
+
+
+
+Errors:
+
+100: As of yet an unhandled case
+101: Referenced object does not exist
+102: Location out of bounds
 
 
 /*

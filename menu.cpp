@@ -19,13 +19,13 @@ Menu::~Menu()
 // core functionality of subclass DevMenu
 bool DevMenu::core()
 {
-int closeMenu = 0;
+bool closeMenu = false;
 string input;
 Board* boardp;
-int firstTime = 1;
+bool firstTime = true;
     while (closeMenu == 0)
     {
-          if (firstTime == 0)
+          if (firstTime == false)
           {
               cout << endl << endl << endl << endl;
           }
@@ -44,12 +44,13 @@ int firstTime = 1;
           }
           else if(input == "test")
           {
+             cout << endl << endl << "___";
           
           }
           else if(input == "close")
           {
              cout << endl << "Closing" <<endl;
-             closeMenu = 1;
+             closeMenu = true;
           }   
           else if(input == "createboard")
           {
@@ -97,13 +98,14 @@ int firstTime = 1;
              cin >> yloc;
              cout << endl << endl << "Creating a Blip with id " << setid << " at " << xloc << "," << yloc;
              boardp->create_blip(setid, xloc, yloc);
+             /*
              cout << endl << endl << "Would you like to check this blip?" << endl << "y/n" << endl << endl;
              cin >> input;
              cout << endl << endl;
              if (input == "y")
              {
                 cout << "checking..."<< endl << endl;
-                //cout << checkBlip(boardp, setid, xloc, yloc)
+                cout << checkBlip(boardp, setid, xloc, yloc)
                 if (boardp->checkIfBlipId(setid, xloc, yloc)==1)
                 {
                     cout << "Blip here!";
@@ -116,12 +118,12 @@ int firstTime = 1;
                 {
                     cout << "Location out of bounds of this board";
                 }
-                
              }
+             */
           }
           else if (input == "printboard")
           {
-             boardp->dev_print_bin();
+              boardp->dev_print_id();
           }
           else if (input == "checklocation")
           {
@@ -132,9 +134,7 @@ int firstTime = 1;
               cin >> xloc;
               cout << endl << endl << "yloc: ";
               cin >> yloc;
-              cout << endl << endl << "id: ";
-              cin >> id;
-              cout << endl << endl << boardp->checkIfBlipId (id, xloc, yloc);   
+              cout << endl << endl << boardp->checkLocId (xloc, yloc);   
           }
           else if (input == "moveblip")
           {
@@ -165,7 +165,20 @@ int firstTime = 1;
                cin >> dir;
                boardp->dir_move_by_loc(curX,curY,dir);
           }    
-               
+          else if (input == "drawgame")
+          {
+               boardp->draw_game_board();
+          }
+          else if (input == "findrange")
+          {
+               int xpos;
+               int ypos;
+               int dir;
+               cin >> xpos;
+               cin >> ypos;
+               cin >> dir;
+               cout << boardp->checkClosestDir(boardp->grid [xpos] [ypos], dir); 
+          }     
           else
           {
              cout << endl << "Input not recognized.";

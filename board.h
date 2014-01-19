@@ -19,6 +19,8 @@ class Board
         int height;
 		// class constructor
 		Board(int w, int h);
+		// initializes the board
+		int initBoard();
 		// returns width
 		int getWidth();
 		// returns height
@@ -29,16 +31,24 @@ class Board
 		int inBound(int xpos, int ypos);
 		// create a blip
 		int create_blip(int id, int xpos, int ypos);
-		// check if there's a blip at some location with given id
-        int checkIfBlipId(int id, int xpos, int ypos);
+		// checks the ID of a blip at the given location. Outputs 0 if no blip
+        int checkLocId(int xpos, int ypos);
         // Move a Blip by its pointer id
         int move_by_id(Blip* someBlip, int newX, int newY);
         // Move a Blip by its coordinates
         int move_by_loc(int curX, int curY, int newX, int newY);
         // Directional movement of a blip by coordinates
         int dir_move_by_loc(int curX, int curY, int dir);
-        // print the grid
+        // print the grid in the binary fashon
 		int dev_print_bin();
+		// print the ids of each space in the grid
+		int dev_print_id();
+		// Prints the board much like an ordinary gameboard, with columns labeled by letters and rows denoted by numbers
+		int draw_game_board();
+		//checks how far the closest blip in a given direction is
+		int checkClosestDir(Blip* source, int dir);
+		
+		
         // class destructor
 		~Board();
 };

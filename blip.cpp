@@ -10,6 +10,7 @@ Blip::Blip(Board* boardp, int type, int startx, int starty)
 	xloc = startx;
 	yloc = starty;
 	id = type;
+    tag = 'x';
 }
 
 // gets x position
@@ -29,6 +30,18 @@ void Blip::move(int newX, int newY)
 {
     xloc = newX;
     yloc = newY;
+}
+
+// gets name
+char Blip::getTag()
+{
+    return tag;
+}
+
+// sets name
+int Blip::setTag(char newTag)
+{
+    tag = newTag;
 }
 
 // class destructor

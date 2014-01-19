@@ -19,8 +19,8 @@ bool Sandbox::core()
 Board* boardp;
 string input;
 int output;
-int end;
-while (end == 0)
+bool quit = false;
+while (quit == false)
 {
     cin >> input;
     if (input == "crtBrd")
@@ -41,15 +41,13 @@ while (end == 0)
         cin >> yloc;
         boardp->create_blip(id, xloc, yloc);
     }
-    else if (input == "chkIfBlp")
+    else if (input == "chkLocId")
     {
-        int id;
         int xloc;
         int yloc;
-        cin >> id;
         cin >> xloc;
         cin >> yloc;
-        output = boardp->checkIfBlipId(id, xloc, yloc);
+        output = boardp->checkLocId(xloc, yloc);
     }
     else if (input == "movBlpLoc")
     {
@@ -75,8 +73,13 @@ while (end == 0)
     }    
     else if (input == "qqq")
     {
-        end = 1;
+        quit = true;
     }
         
 }
+}
+
+bool Pulse :: core()
+{
+     cout << "Welcome to pulse";
 }

@@ -13,12 +13,17 @@ class Blip
         int id;
         int xloc;
         int yloc;
+       	char tag;
 		// class constructor
 		Blip(Board* boardp, int id,int startx, int starty);
 		// returns x location
 		int getX();
 		// returns y location
 		int getY();
+		// returns tag
+		char getTag();
+		// sets tag
+		int setTag(char newTag);
 		// class destructor
 		~Blip();
 		// Change internal blip location
